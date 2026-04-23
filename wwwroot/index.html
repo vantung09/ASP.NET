@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VuVanTung_2122110476 - Phone Store Manager</title>
+    <link rel="stylesheet" href="/css/app.css" />
+  </head>
+  <body>
+    <section id="login-screen" class="login-screen">
+      <div class="login-layout">
+        <div class="login-showcase">
+          <span class="surface-badge">Retail Dashboard</span>
+          <p class="eyebrow">Phone Store Manager</p>
+          <h1>Điều hành cửa hàng điện thoại trên một giao diện sáng rõ và hiện đại.</h1>
+          <p class="lead">
+            Quản lý danh mục, sản phẩm, kho hàng, tồn kho, đại lý và phiếu nhập xuất bằng dashboard trực quan, kết nối trực tiếp ASP.NET Core Web API với SQL Server.
+          </p>
+
+          <div class="showcase-grid">
+            <article class="showcase-stat">
+              <strong>7</strong>
+              <span>phân hệ vận hành</span>
+            </article>
+            <article class="showcase-stat">
+              <strong>JWT</strong>
+              <span>đăng nhập phân quyền</span>
+            </article>
+            <article class="showcase-stat">
+              <strong>SQL</strong>
+              <span>đồng bộ dữ liệu thật</span>
+            </article>
+          </div>
+
+          <div class="showcase-panel">
+            <div class="panel-headline">
+              <span class="signal online"></span>
+              <span>Hệ thống sẵn sàng vận hành</span>
+            </div>
+            <ul class="feature-list">
+              <li>Tra cứu nhanh sản phẩm, kho, đại lý và tồn kho ngay trên một màn hình.</li>
+              <li>Lập phiếu nhập xuất để cộng trừ tồn kho tự động theo từng kho.</li>
+              <li>Thiết kế responsive, phù hợp cho desktop lẫn màn hình nhỏ.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="login-card">
+          <p class="eyebrow">Đăng nhập quản trị</p>
+          <h2>PhoneStore Admin</h2>
+          <p class="muted">
+            Dùng tài khoản demo để vào bảng điều khiển và trải nghiệm giao diện quản lý mới.
+          </p>
+          <form id="login-form" class="form-stack">
+            <label>
+              <span>Tên đăng nhập</span>
+              <input name="username" value="admin" autocomplete="username" required />
+            </label>
+            <label>
+              <span>Mật khẩu</span>
+              <input name="password" type="password" value="admin123" autocomplete="current-password" required />
+            </label>
+            <div id="login-error" class="alert error hidden"></div>
+            <button class="btn primary" type="submit">Đăng nhập quản trị</button>
+            <button class="btn ghost" type="button" id="guest-btn">Xem với vai trò khách</button>
+          </form>
+          <p class="hint">Admin demo: <b>admin</b> / <b>admin123</b>. User demo: <b>user</b> / <b>user123</b>.</p>
+        </div>
+      </div>
+    </section>
+
+    <main id="app" class="app hidden">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark">PS</span>
+          <div>
+            <strong>PhoneStore</strong>
+            <small>VuVanTung_2122110476</small>
+          </div>
+        </div>
+
+        <p class="sidebar-copy">
+          Bảng điều khiển quản lý cửa hàng điện thoại, phụ kiện, đại lý và dòng nhập xuất theo thời gian thực.
+        </p>
+
+        <nav class="nav">
+          <button class="nav-btn active" data-view="home" type="button">
+            <span class="nav-order">01</span>
+            <span class="nav-text">Cửa hàng</span>
+          </button>
+          <button class="nav-btn" data-view="categories" type="button">
+            <span class="nav-order">02</span>
+            <span class="nav-text">Danh mục</span>
+          </button>
+          <button class="nav-btn" data-view="products" type="button">
+            <span class="nav-order">03</span>
+            <span class="nav-text">Sản phẩm</span>
+          </button>
+          <button class="nav-btn" data-view="warehouses" type="button">
+            <span class="nav-order">04</span>
+            <span class="nav-text">Kho hàng</span>
+          </button>
+          <button class="nav-btn" data-view="stocks" type="button">
+            <span class="nav-order">05</span>
+            <span class="nav-text">Tồn kho</span>
+          </button>
+          <button class="nav-btn" data-view="dealers" type="button">
+            <span class="nav-order">06</span>
+            <span class="nav-text">Đại lý</span>
+          </button>
+          <button class="nav-btn" data-view="transactions" type="button">
+            <span class="nav-order">07</span>
+            <span class="nav-text">Nhập xuất</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <a class="swagger-link" href="/swagger" target="_blank" rel="noopener">Mở Swagger API</a>
+          <small>JWT | EF Core | SQL Server</small>
+        </div>
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar">
+          <div class="topbar-copy">
+            <p class="eyebrow">ASP.NET Core + SQL Server</p>
+            <h2 id="view-title">Cửa hàng</h2>
+            <p id="view-note" class="topbar-note">Theo dõi dữ liệu vận hành theo thời gian thực từ Web API.</p>
+          </div>
+          <div class="account">
+            <span class="status-pill"><span class="status-dot"></span>API trực tuyến</span>
+            <span id="user-chip" class="chip">Khách</span>
+            <button class="btn small" id="logout-btn" type="button">Đăng xuất</button>
+          </div>
+        </header>
+
+        <section id="view-home" class="view">
+          <div class="hero">
+            <div class="hero-copy">
+              <p class="eyebrow">Dashboard bán hàng</p>
+              <h1>Quản lý sản phẩm, kho hàng, đại lý và nhập xuất bằng một trải nghiệm trực quan hơn.</h1>
+              <p>
+                Giao diện mới tập trung vào tốc độ quan sát, làm nổi bật số liệu quan trọng và giúp thao tác quản trị sản phẩm, đối tác và luồng hàng gọn hơn trên cả desktop lẫn mobile.
+              </p>
+              <div class="hero-actions">
+                <button class="btn primary" data-jump="products" type="button">Quản lý sản phẩm</button>
+                <button class="btn dark" data-jump="transactions" type="button">Lập phiếu nhập xuất</button>
+              </div>
+              <div class="hero-tags">
+                <span class="hero-tag">Tìm kiếm nhanh</span>
+                <span class="hero-tag">Quản lý đại lý</span>
+                <span class="hero-tag">Tự cập nhật tồn kho</span>
+              </div>
+            </div>
+
+            <div class="hero-card">
+              <div class="hero-card-top">
+                <span class="mini-label">Data Pulse</span>
+                <span class="mini-chip">EF Core</span>
+              </div>
+              <strong>SQL Server Ready</strong>
+              <p>Dữ liệu được đồng bộ từ Web API, sẵn sàng cho thao tác CRUD, quản lý đại lý, phiếu nhập xuất và theo dõi hàng tồn ngay trong cùng một dashboard.</p>
+              <div class="hero-mini-grid">
+                <div>
+                  <span>Auth</span>
+                  <strong>JWT phân quyền</strong>
+                </div>
+                <div>
+                  <span>Catalog</span>
+                  <strong>Sản phẩm + danh mục</strong>
+                </div>
+                <div>
+                  <span>Partners</span>
+                  <strong>Đại lý nhập / xuất</strong>
+                </div>
+                <div>
+                  <span>Flow</span>
+                  <strong>Nhập, xuất, tồn</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="stats" class="stats-grid"></div>
+
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Sản phẩm nổi bật</p>
+              <h3>Catalog hiện có trong hệ thống</h3>
+              <p class="section-subtitle">Tìm nhanh theo mã, tên, thương hiệu hoặc danh mục để xem tình trạng hàng.</p>
+            </div>
+            <input id="home-search" class="search" placeholder="Tìm sản phẩm..." />
+          </div>
+          <div id="product-cards" class="product-grid"></div>
+        </section>
+
+        <section id="view-categories" class="view hidden">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Category</p>
+              <h3>Danh mục sản phẩm</h3>
+              <p class="section-subtitle">Quản lý các nhóm hàng để phân loại catalog rõ ràng hơn.</p>
+            </div>
+            <div class="actions">
+              <input id="cat-search" class="search" placeholder="Tìm danh mục..." />
+              <button id="cat-add" class="btn primary admin-only hidden" type="button">Thêm danh mục</button>
+            </div>
+          </div>
+          <div id="cat-alert"></div>
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Mã</th>
+                  <th>Tên</th>
+                  <th>Mô tả</th>
+                  <th class="admin-only hidden">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="cat-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="view-products" class="view hidden">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Product</p>
+              <h3>Sản phẩm điện thoại và phụ kiện</h3>
+              <p class="section-subtitle">Theo dõi mã hàng, giá bán, giá gốc và danh mục ngay trong một bảng rõ ràng.</p>
+            </div>
+            <div class="actions">
+              <input id="prd-search" class="search" placeholder="Tìm sản phẩm..." />
+              <button id="prd-add" class="btn primary admin-only hidden" type="button">Thêm sản phẩm</button>
+            </div>
+          </div>
+          <div id="prd-alert"></div>
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Ảnh</th>
+                  <th>Mã</th>
+                  <th>Tên</th>
+                  <th>Brand</th>
+                  <th>Giá bán</th>
+                  <th>Giá gốc</th>
+                  <th>Danh mục</th>
+                  <th class="admin-only hidden">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="prd-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="view-warehouses" class="view hidden">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Warehouse</p>
+              <h3>Kho hàng</h3>
+              <p class="section-subtitle">Quản lý mã kho, tên kho và địa chỉ lưu trữ trong cùng một khu vực.</p>
+            </div>
+            <div class="actions">
+              <input id="wh-search" class="search" placeholder="Tìm kho..." />
+              <button id="wh-add" class="btn primary admin-only hidden" type="button">Thêm kho</button>
+            </div>
+          </div>
+          <div id="wh-alert"></div>
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Mã kho</th>
+                  <th>Tên kho</th>
+                  <th>Địa chỉ</th>
+                  <th class="admin-only hidden">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="wh-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="view-stocks" class="view hidden">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Stock</p>
+              <h3>Tồn kho</h3>
+              <p class="section-subtitle">Kiểm soát số lượng từng sản phẩm tại từng kho và thời điểm cập nhật gần nhất.</p>
+            </div>
+            <div class="actions">
+              <input id="stk-search" class="search" placeholder="Tìm tồn kho..." />
+              <button id="stk-add" class="btn primary admin-only hidden" type="button">Cập nhật tồn</button>
+            </div>
+          </div>
+          <div id="stk-alert"></div>
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Kho</th>
+                  <th>Sản phẩm</th>
+                  <th>Số lượng</th>
+                  <th>Cập nhật</th>
+                  <th class="admin-only hidden">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="stk-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="view-dealers" class="view hidden">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Dealer</p>
+              <h3>Đại lý nhập xuất</h3>
+              <p class="section-subtitle">Lưu trữ đối tác nhập, xuất hoặc cả hai chiều để gắn vào từng phiếu giao dịch.</p>
+            </div>
+            <div class="actions">
+              <input id="dlr-search" class="search" placeholder="Tìm đại lý..." />
+              <button id="dlr-add" class="btn primary admin-only hidden" type="button">Thêm đại lý</button>
+            </div>
+          </div>
+          <div id="dlr-alert"></div>
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Mã đại lý</th>
+                  <th>Tên đại lý</th>
+                  <th>Loại</th>
+                  <th>Liên hệ</th>
+                  <th>Số điện thoại</th>
+                  <th>Địa chỉ</th>
+                  <th class="admin-only hidden">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="dlr-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="view-transactions" class="view hidden">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Inventory Flow</p>
+              <h3>Phiếu nhập xuất</h3>
+              <p class="section-subtitle">Lập phiếu theo từng kho, sản phẩm và đại lý để cập nhật tồn kho tự động.</p>
+            </div>
+            <div class="actions">
+              <input id="trx-search" class="search" placeholder="Tìm phiếu nhập xuất..." />
+              <button id="trx-add" class="btn primary admin-only hidden" type="button">Tạo phiếu</button>
+            </div>
+          </div>
+          <div id="trx-alert"></div>
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mã phiếu</th>
+                  <th>Loại</th>
+                  <th>Sản phẩm</th>
+                  <th>Kho</th>
+                  <th>Đại lý</th>
+                  <th>Số lượng</th>
+                  <th>Đơn giá</th>
+                  <th>Thành tiền</th>
+                  <th>Ngày giao dịch</th>
+                  <th>Ghi chú</th>
+                  <th class="admin-only hidden">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="trx-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div id="modal-root"></div>
+    <script src="/js/app.js" defer></script>
+  </body>
+</html>

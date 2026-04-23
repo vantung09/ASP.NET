@@ -56,17 +56,131 @@ namespace ConnectDB.Migrations
                         new
                         {
                             Id = 1,
-                            CategoryCode = "CAT-FOOD",
-                            CategoryName = "Food",
-                            Description = "Food items"
+                            CategoryCode = "CAT-IPHONE",
+                            CategoryName = "iPhone",
+                            Description = "Dien thoai Apple iPhone"
                         },
                         new
                         {
                             Id = 2,
-                            CategoryCode = "CAT-TECH",
-                            CategoryName = "Technology",
-                            Description = "Tech items"
+                            CategoryCode = "CAT-MAC",
+                            CategoryName = "Mac",
+                            Description = "May tinh MacBook va iMac"
                         });
+                });
+
+            modelBuilder.Entity("ConnectDB.Models.Dealer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ContactPerson")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DealerCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DealerName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("DealerType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DealerCode")
+                        .IsUnique();
+
+                    b.ToTable("Dealers");
+                });
+
+            modelBuilder.Entity("ConnectDB.Models.InventoryTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DealerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TransactionCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DealerId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("TransactionCode")
+                        .IsUnique();
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("InventoryTransactions");
                 });
 
             modelBuilder.Entity("ConnectDB.Models.Product", b =>
@@ -77,6 +191,11 @@ namespace ConnectDB.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -84,6 +203,14 @@ namespace ConnectDB.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal?>("OriginalPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -116,49 +243,29 @@ namespace ConnectDB.Migrations
                         new
                         {
                             Id = 1,
+                            Brand = "Apple",
                             CategoryId = 1,
-                            Description = "Fresh apple",
-                            Price = 2.50m,
-                            ProductCode = "PRD-APPLE",
-                            ProductName = "Apple",
-                            Unit = "kg"
+                            Description = "Dien thoai cao cap, chip manh, camera dep.",
+                            ImageUrl = "https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=1200&auto=format&fit=crop",
+                            OriginalPrice = 34990000m,
+                            Price = 31990000m,
+                            ProductCode = "IP15PM-256",
+                            ProductName = "iPhone 15 Pro Max 256GB",
+                            Unit = "pcs"
                         },
                         new
                         {
                             Id = 2,
+                            Brand = "Apple",
                             CategoryId = 2,
-                            Description = "Office laptop",
-                            Price = 899.00m,
-                            ProductCode = "PRD-LAPTOP",
-                            ProductName = "Laptop",
+                            Description = "Laptop mong nhe, pin lau, phu hop hoc tap va lam viec.",
+                            ImageUrl = "https://images.unsplash.com/photo-1517336714739-489689fd1ca8?q=80&w=1200&auto=format&fit=crop",
+                            OriginalPrice = 29990000m,
+                            Price = 27990000m,
+                            ProductCode = "MBA-M3-13",
+                            ProductName = "MacBook Air M3 13 inch",
                             Unit = "pcs"
                         });
-                });
-
-            modelBuilder.Entity("ConnectDB.Models.Student", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Birthday")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("StudentCode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("ConnectDB.Models.Warehouse", b =>
@@ -213,6 +320,33 @@ namespace ConnectDB.Migrations
                     b.ToTable("WarehouseStocks");
                 });
 
+            modelBuilder.Entity("ConnectDB.Models.InventoryTransaction", b =>
+                {
+                    b.HasOne("ConnectDB.Models.Dealer", "Dealer")
+                        .WithMany("InventoryTransactions")
+                        .HasForeignKey("DealerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ConnectDB.Models.Product", "Product")
+                        .WithMany("InventoryTransactions")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ConnectDB.Models.Warehouse", "Warehouse")
+                        .WithMany("InventoryTransactions")
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Dealer");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Warehouse");
+                });
+
             modelBuilder.Entity("ConnectDB.Models.Product", b =>
                 {
                     b.HasOne("ConnectDB.Models.Category", "Category")
@@ -248,13 +382,22 @@ namespace ConnectDB.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("ConnectDB.Models.Dealer", b =>
+                {
+                    b.Navigation("InventoryTransactions");
+                });
+
             modelBuilder.Entity("ConnectDB.Models.Product", b =>
                 {
+                    b.Navigation("InventoryTransactions");
+
                     b.Navigation("WarehouseStocks");
                 });
 
             modelBuilder.Entity("ConnectDB.Models.Warehouse", b =>
                 {
+                    b.Navigation("InventoryTransactions");
+
                     b.Navigation("WarehouseStocks");
                 });
 #pragma warning restore 612, 618

@@ -24,7 +24,7 @@ namespace ConnectDB.Services
             if (!string.IsNullOrWhiteSpace(query.Search))
             {
                 var s = query.Search.Trim();
-                q = q.Where(p => p.ProductCode.Contains(s) || p.ProductName.Contains(s));
+                q = q.Where(p => p.ProductCode.Contains(s) || p.ProductName.Contains(s) || p.Brand.Contains(s));
             }
 
             q = ApplySort(q, query.SortBy, query.SortDir);
@@ -39,8 +39,11 @@ namespace ConnectDB.Services
                     ProductCode = p.ProductCode,
                     ProductName = p.ProductName,
                     Description = p.Description,
+                    Brand = p.Brand,
+                    ImageUrl = p.ImageUrl,
                     Unit = p.Unit,
                     Price = p.Price,
+                    OriginalPrice = p.OriginalPrice,
                     CategoryId = p.CategoryId,
                     CategoryName = p.Category != null ? p.Category.CategoryName : string.Empty
                 })
@@ -66,8 +69,11 @@ namespace ConnectDB.Services
                 ProductCode = entity.ProductCode,
                 ProductName = entity.ProductName,
                 Description = entity.Description,
+                Brand = entity.Brand,
+                ImageUrl = entity.ImageUrl,
                 Unit = entity.Unit,
                 Price = entity.Price,
+                OriginalPrice = entity.OriginalPrice,
                 CategoryId = entity.CategoryId,
                 CategoryName = entity.Category != null ? entity.Category.CategoryName : string.Empty
             };
@@ -91,8 +97,11 @@ namespace ConnectDB.Services
                 ProductCode = dto.ProductCode,
                 ProductName = dto.ProductName,
                 Description = dto.Description,
+                Brand = dto.Brand,
+                ImageUrl = dto.ImageUrl,
                 Unit = dto.Unit,
                 Price = dto.Price,
+                OriginalPrice = dto.OriginalPrice,
                 CategoryId = dto.CategoryId
             };
 
@@ -105,8 +114,11 @@ namespace ConnectDB.Services
                 ProductCode = entity.ProductCode,
                 ProductName = entity.ProductName,
                 Description = entity.Description,
+                Brand = entity.Brand,
+                ImageUrl = entity.ImageUrl,
                 Unit = entity.Unit,
                 Price = entity.Price,
+                OriginalPrice = entity.OriginalPrice,
                 CategoryId = entity.CategoryId,
                 CategoryName = category.CategoryName
             }, null);
@@ -132,8 +144,11 @@ namespace ConnectDB.Services
             entity.ProductCode = dto.ProductCode;
             entity.ProductName = dto.ProductName;
             entity.Description = dto.Description;
+            entity.Brand = dto.Brand;
+            entity.ImageUrl = dto.ImageUrl;
             entity.Unit = dto.Unit;
             entity.Price = dto.Price;
+            entity.OriginalPrice = dto.OriginalPrice;
             entity.CategoryId = dto.CategoryId;
 
             _repo.Update(entity);
@@ -158,6 +173,7 @@ namespace ConnectDB.Services
             {
                 "code" => desc ? query.OrderByDescending(p => p.ProductCode) : query.OrderBy(p => p.ProductCode),
                 "name" => desc ? query.OrderByDescending(p => p.ProductName) : query.OrderBy(p => p.ProductName),
+                "brand" => desc ? query.OrderByDescending(p => p.Brand) : query.OrderBy(p => p.Brand),
                 "price" => desc ? query.OrderByDescending(p => p.Price) : query.OrderBy(p => p.Price),
                 _ => desc ? query.OrderByDescending(p => p.Id) : query.OrderBy(p => p.Id)
             };

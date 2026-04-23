@@ -19,6 +19,12 @@ namespace ConnectDB.Models
         [StringLength(500)]
         public string Description { get; set; } = string.Empty;
 
+        [StringLength(100)]
+        public string Brand { get; set; } = string.Empty;
+
+        [StringLength(500)]
+        public string ImageUrl { get; set; } = string.Empty;
+
         [Required]
         [StringLength(50)]
         public string Unit { get; set; } = "pcs";
@@ -26,9 +32,13 @@ namespace ConnectDB.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal? OriginalPrice { get; set; }
+
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
 
         public ICollection<WarehouseStock> WarehouseStocks { get; set; } = new List<WarehouseStock>();
+        public ICollection<InventoryTransaction> InventoryTransactions { get; set; } = new List<InventoryTransaction>();
     }
 }

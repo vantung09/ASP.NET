@@ -16,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "ConnectDB API", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "QuanLyCuaKhoDienThoai_VuVanTung_2122110476", Version = "v1" });
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -63,11 +63,15 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IWarehouseRepository, WarehouseRepository>();
 builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<IDealerRepository, DealerRepository>();
+builder.Services.AddScoped<IInventoryTransactionRepository, InventoryTransactionRepository>();
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IWarehouseService, WarehouseService>();
 builder.Services.AddScoped<IStockService, StockService>();
+builder.Services.AddScoped<IDealerService, DealerService>();
+builder.Services.AddScoped<IInventoryTransactionService, InventoryTransactionService>();
 
 var app = builder.Build();
 
@@ -83,6 +87,10 @@ if (!string.IsNullOrWhiteSpace(httpsPort) || !string.IsNullOrWhiteSpace(httpsUrl
 {
     app.UseHttpsRedirection();
 }
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

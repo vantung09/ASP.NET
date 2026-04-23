@@ -19,5 +19,6 @@ namespace ConnectDB.Models
         public string Address { get; set; } = string.Empty;
 
         public ICollection<WarehouseStock> WarehouseStocks { get; set; } = new List<WarehouseStock>();
+        public ICollection<InventoryTransaction> InventoryTransactions { get; set; } = new List<InventoryTransaction>();
     }
 }
